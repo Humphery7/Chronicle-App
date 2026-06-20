@@ -1,98 +1,245 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { useRouter } from 'expo-router';
+import React, { useEffect } from 'react';
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const router = useRouter();
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  // useEffect(() => {
+  //   // This only works on Android and only with certain builds.
+  //   // We safe-load it here so it doesn't crash the whole app if missing.
+  //   if (Platform.OS === 'android') {
+  //     try {
+  //       const NavigationBar = require('expo-navigation-bar');
+  //       NavigationBar.setBehaviorAsync('overlay-swipe');
+  //       NavigationBar.setVisibilityAsync('hidden');
+  //     } catch (e) {
+  //       // Just ignore if the module isn't available in Expo Go
+  //     }
+  //   }
+  // }, []);
+
+  return (
+    <View style={styles.page}>
+      <StatusBar barStyle="light-content" />
+
+      <View style={styles.logoBox}>
+        <View style={styles.book}>
+          {/* Audio waveform bars inside the book */}
+          <View style={[styles.bar, { height: 14 }]} />
+          <View style={[styles.bar, { height: 22 }]} />
+          <View style={[styles.bar, { height: 16 }]} />
+          <View style={[styles.bar, { height: 26 }]} />
+          <View style={[styles.bar, { height: 18 }]} />
+          <View style={[styles.bar, { height: 12 }]} />
+        </View>
+        {/* Book spine line at the bottom */}
+        <View style={styles.bookSpine} />
+      </View>
+
+      {/* ── Main Tagline ── */}
+      <Text style={styles.taglineWhite}>Speak your mind.</Text>
+      <Text style={styles.taglineGold}>Hear your thoughts.</Text>
+
+      {/* ── Subtitle ── */}
+      <Text style={styles.subtitle}>Your AI-powered voice journal.</Text>
+
+      {/* ── Get Started Button ── */}
+      <TouchableOpacity style={styles.button} activeOpacity={0.85} onPress={() => router.push('/dashboard')}>
+        <Text style={styles.buttonText}>GET STARTED</Text>
+      </TouchableOpacity>
+
+      {/* ── Divider with text ── */}
+      <View style={styles.dividerRow}>
+        <View style={styles.line} />
+        <Text style={styles.dividerText}>CRAFTED FOR INTROSPECTION</Text>
+        <View style={styles.line} />
+      </View>
+
+      {/* ── Privacy note at the bottom ── */}
+      <View style={styles.privacyRow}>
+        <Text style={styles.privacyText}>🔒  YOUR THOUGHTS STAY PRIVATE. ALWAYS.</Text>
+      </View>
+
+    </View>
   );
 }
 
+// =============================================
+// STYLES
+// =============================================
+
+const GOLD = '#d4a017';
+
 const styles = StyleSheet.create({
-  titleContainer: {
+
+  // Dark background, everything centered
+  page: {
+    flex: 1,
+    backgroundColor: '#0f0f1c',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 36,
+  },
+
+  // ── Logo ──
+  logoBox: {
+    alignItems: 'center',
+    marginBottom: 48,
+  },
+
+  book: {
+    width: 80,
+    height: 56,
+    backgroundColor: '#2a2210',
+    borderRadius: 6,
+    borderWidth: 2.5,
+    borderColor: GOLD,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'center',
+    gap: 5,
+    paddingHorizontal: 10,
+    overflow: 'hidden',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+
+  bar: {
+    width: 4,
+    backgroundColor: GOLD,
+    borderRadius: 2,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+
+  bookSpine: {
+    width: 80,
+    height: 5,
+    backgroundColor: GOLD,
+    borderBottomLeftRadius: 4,
+    borderBottomRightRadius: 4,
+    opacity: 0.6,
+  },
+
+  // ── Tagline ──
+  taglineWhite: {
+    fontSize: 44,
+    fontStyle: 'italic',
+    color: '#ffffff',
+    textAlign: 'center',
+    lineHeight: 54,
+    fontWeight: '300',
+  },
+
+  taglineGold: {
+    fontSize: 44,
+    fontStyle: 'italic',
+    color: GOLD,
+    textAlign: 'center',
+    lineHeight: 54,
+    fontWeight: '300',
+    marginBottom: 28,
+  },
+
+  // ── Subtitle ──
+  subtitle: {
+    fontSize: 15,
+    color: '#99a0b0',
+    textAlign: 'center',
+    marginBottom: 52,
+  },
+
+  // ── Button ──
+  button: {
+    backgroundColor: GOLD,
+    borderRadius: 50,
+    paddingVertical: 20,
+    paddingHorizontal: 64,
+    marginBottom: 44,
+    // Glow effect
+    shadowColor: GOLD,
+    shadowOpacity: 0.5,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 8,
+  },
+
+  buttonText: {
+    color: '#111111',
+    fontSize: 13,
+    fontWeight: '800',
+    letterSpacing: 3,
+  },
+
+  // ── Divider ──
+  dividerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 40,
+  },
+
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#333',
+  },
+
+  dividerText: {
+    fontSize: 9,
+    color: '#666',
+    letterSpacing: 2.5,
+  },
+
+  // ── Privacy ──
+  privacyRow: {
     position: 'absolute',
+    bottom: 36,
   },
+
+  privacyText: {
+    fontSize: 10,
+    color: '#555',
+    letterSpacing: 1.5,
+  },
+
 });
+
+
+// import { useRouter} from 'expo-router'
+// import React from 'react'
+
+// import {
+//   StatusBar,
+//   StyleSheet,
+//   Text,
+//   TouchableOpacity,
+//   View
+// } from 'react-native'
+
+
+// export default function homeScreen() {
+//   const router = useRouter();
+
+//   return{
+//     <View style={styles.page}>
+//     <StatusBar barStyle="light-content"/>
+//     <View style={styles.logobox}></View>
+//     }
+//   }
+
+// }
+
+// const styles = StyleSheet.create({
+//   page:{
+//     flex:1,
+//     backgroundColor: '#0f0f1c',
+//     alignItems: 'center',
+// justifyContent: 'center',
+// paddingHorizontal: 36
+//   }
+// })
